@@ -23,7 +23,7 @@ namespace NHibOneToOneOrZero
                     await SeedDatabase();
                 }
                 
-                await QueryLivingSheep();
+                await QuerySheep();
             }
             finally
             {
@@ -31,39 +31,83 @@ namespace NHibOneToOneOrZero
             }            
         }
 
-        private static async Task QueryLivingSheep()
+        private static async Task QuerySheep()
         {
             
             await ExecuteDb(session =>
             {
                 WriteLineWithColor("Querying living sheep (no slaughter info)...");
-                var query1 = session.Query<Sheep>().Where(s => s.SheepId == 1 && s.SlaughterInfo == null).SingleOrDefault();
+
+                // No data returned because of null check (SlaughterInfo)
+                WriteHorizontalRule();
+                var query1 = session
+                    .Query<Sheep>()
+                    .Where(s => s.SheepId == 1 && s.SlaughterInfo == null)
+                    .SingleOrDefault();
+
                 WriteLineWithColor($"Living sheep by Id (with null check): Expected = Dolly, actual = {query1?.Name}", 
                     color: GetResultColor(null != query1));
 
-                var query2 = session.Query<Sheep>().Where(s => s.SlaughterInfo == null).SingleOrDefault();
+                // No data returned because of null check (SlaughterInfo)
+                WriteHorizontalRule();
+                var query2 = session
+                    .Query<Sheep>()
+                    .Where(s => s.SlaughterInfo == null)
+                    .SingleOrDefault();
+
                 WriteLineWithColor($"Living sheep (with null check): Expected = Dolly, actual = {query2?.Name}",
                     color: GetResultColor(null != query2));
 
-                var query3 = session.Query<Sheep>().Where(s => s.SheepId == 1).SingleOrDefault();
+                // Data returned as expected (no null check of SlaughterInfo)
+                WriteHorizontalRule();
+                var query3 = session
+                    .Query<Sheep>()
+                    .Where(s => s.SheepId == 1)
+                    .SingleOrDefault();
+
                 WriteLineWithColor($"Living sheep by Id (without null check): Expected = Dolly, actual = {query3?.Name}", 
                     color: GetResultColor(null != query3));
 
                 WriteLineWithColor("Querying dead sheep (with slaughter info)...");
-                var query4 = session.Query<Sheep>().Where(s => s.SheepId == 2 && s.SlaughterInfo != null).SingleOrDefault();
+
+                // Data returned as expected
+                WriteHorizontalRule();
+                var query4 = session
+                    .Query<Sheep>()
+                    .Where(s => s.SheepId == 2 && s.SlaughterInfo != null)
+                    .SingleOrDefault();
+
                 WriteLineWithColor($"Dead sheep by Id (with null check): Expected = Fresh meat, actual = {query4?.Name}",
                     color: GetResultColor(null != query4));
 
-                var query5 = session.Query<Sheep>().Where(s => s.SlaughterInfo != null).SingleOrDefault();
+                // Data returned as expected
+                WriteHorizontalRule();
+                var query5 = session
+                    .Query<Sheep>()
+                    .Where(s => s.SlaughterInfo != null)
+                    .SingleOrDefault();
+
                 WriteLineWithColor($"Dead sheep (with null check): Expected = Fresh meat, actual = {query5?.Name}",
                     color: GetResultColor(null != query5));
 
-                var query6 = session.Query<Sheep>().Where(s => s.SheepId == 2).SingleOrDefault();
+                // Data returned as expected
+                WriteHorizontalRule();
+                var query6 = session
+                    .Query<Sheep>()
+                    .Where(s => s.SheepId == 2)
+                    .SingleOrDefault();
+
                 WriteLineWithColor($"Dead sheep by Id (without null check): Expected = Fresh meat, actual = {query6?.Name}",
                     color: GetResultColor(null != query6));
+                WriteHorizontalRule();
 
                 return Task.CompletedTask;
             });
+        }
+
+        private static void WriteHorizontalRule()
+        {
+            WriteLineWithColor(new string('-', 80), ConsoleColor.Blue);
         }
 
         private static async Task<bool> IsEmptyDatabase()

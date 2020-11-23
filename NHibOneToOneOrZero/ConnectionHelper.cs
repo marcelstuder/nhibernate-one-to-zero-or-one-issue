@@ -39,7 +39,6 @@ namespace NHibOneToOneOrZero
                     MsSqlConfiguration.MsSql2012
                     .ConnectionString("Data Source=(LocalDb)\\MSSQLLocalDB;database=OneToOneDemo;trusted_connection=yes;Integrated Security=True;")
                     .ShowSql())
-                //.ConnectionString(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + AppDomain.CurrentDomain.BaseDirectory + "General\\Data\\MyDatabase.mdf" + ";Integrated Security=True;")               
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<SheepMap>())
                 .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(useStdOut: true, doUpdate: true))
                 .BuildSessionFactory();
