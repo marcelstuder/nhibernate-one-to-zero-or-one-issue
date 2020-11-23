@@ -42,10 +42,10 @@ namespace NHibOneToOneOrZero
                 WriteHorizontalRule();
                 var query1 = session
                     .Query<Sheep>()
-                    .Where(s => s.SheepId == 1 && s.SlaughterInfo == null)
+                    .Where(s => s.Name == "Dolly" && s.SlaughterInfo == null)
                     .SingleOrDefault();
 
-                WriteLineWithColor($"Living sheep by Id (with null check): Expected = Dolly, actual = {query1?.Name}", 
+                WriteLineWithColor($"Living sheep by name (with null check): Expected = Dolly, actual = {query1?.Name}", 
                     color: GetResultColor(null != query1));
 
                 // No data returned because of null check (SlaughterInfo)
@@ -62,11 +62,12 @@ namespace NHibOneToOneOrZero
                 WriteHorizontalRule();
                 var query3 = session
                     .Query<Sheep>()
-                    .Where(s => s.SheepId == 1)
+                    .Where(s => s.Name == "Dolly")
                     .SingleOrDefault();
 
-                WriteLineWithColor($"Living sheep by Id (without null check): Expected = Dolly, actual = {query3?.Name}", 
+                WriteLineWithColor($"Living sheep by name (without null check): Expected = Dolly, actual = {query3?.Name}", 
                     color: GetResultColor(null != query3));
+                WriteHorizontalRule();
 
                 WriteLineWithColor("Querying dead sheep (with slaughter info)...");
 
@@ -74,10 +75,10 @@ namespace NHibOneToOneOrZero
                 WriteHorizontalRule();
                 var query4 = session
                     .Query<Sheep>()
-                    .Where(s => s.SheepId == 2 && s.SlaughterInfo != null)
+                    .Where(s => s.Name == "Fresh meat" && s.SlaughterInfo != null)
                     .SingleOrDefault();
 
-                WriteLineWithColor($"Dead sheep by Id (with null check): Expected = Fresh meat, actual = {query4?.Name}",
+                WriteLineWithColor($"Dead sheep by name (with null check): Expected = Fresh meat, actual = {query4?.Name}",
                     color: GetResultColor(null != query4));
 
                 // Data returned as expected
@@ -94,10 +95,10 @@ namespace NHibOneToOneOrZero
                 WriteHorizontalRule();
                 var query6 = session
                     .Query<Sheep>()
-                    .Where(s => s.SheepId == 2)
+                    .Where(s => s.Name == "Fresh meat")
                     .SingleOrDefault();
 
-                WriteLineWithColor($"Dead sheep by Id (without null check): Expected = Fresh meat, actual = {query6?.Name}",
+                WriteLineWithColor($"Dead sheep by name (without null check): Expected = Fresh meat, actual = {query6?.Name}",
                     color: GetResultColor(null != query6));
                 WriteHorizontalRule();
 
